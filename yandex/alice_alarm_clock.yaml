@@ -1,0 +1,37 @@
+blueprint:
+  name: Alice Alarm Clock With Music
+  description: Alarm clock for Alice which will play music from Yandex.Music
+  domain: automation
+  input:
+    alarm_time:
+      name: Alarm Time
+      description: This variable holds time at which alarm will sound
+      default: "09:00:00"
+      selector:
+        time:
+    media_url:
+      name: Media URL
+      description: This variable holds URL of the media which will be played
+      default: "https://music.yandex.ru/track/609676"
+      selector:
+        text:
+    target_device:
+      name: Alice Device
+      description: Target Alice device which will be used for this automation
+      selector:
+        target:
+          entity:
+            domain: media_player
+
+trigger:
+  - platform: time
+    at: !input alarm_time
+
+action:
+  - service: media_player.play_media
+      data:
+        media_content_id: !input media_url
+        media_content_type: audio/mp3
+      target: !input target_device
+
+mode: single
