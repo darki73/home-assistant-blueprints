@@ -1,0 +1,75 @@
+blueprint:
+  name: Alice Automatic LED Brightness
+  description: Modify LED brightness on the Alice with LED display
+  domain: automation
+  input:
+    time_day:
+      name: Time when day "starts"
+      description: This variable holds information about the time your day time "starts"
+      default: "09:00:00"
+      selector:
+        time:
+    time_night:
+      name: Time when night "starts"
+      description: This variable holds information about the time your night time "starts"
+      default: "23:00:00"
+      selector:
+        time:
+    brightness_day:
+      name: Day time LED display brightness
+      description: Brightness of the display during the day
+      default: "1.0"
+      selector:
+        number:
+          min: 0.0
+          max: 1.0
+          step: 0.1
+          mode: slider
+    brightness_night:
+      name: Night time LED display brightness
+      description: Brightness of the display during the night
+      default: "0.1"
+      selector:
+        number:
+          min: 0.0
+          max: 1.0
+          step: 0.1
+          mode: slider
+    target_device:
+      name: Alice Device
+      description: Target Alice device which will be used for this automation
+      selector:
+        target:
+          entity:
+            domain: media_player
+
+trigger:
+  - platform: time
+    at: !input time_day
+  - platform: time
+    at: !input time_night
+
+action:
+  - choose:
+      - conditions:
+          - condition: time
+            after: !input time_day
+            before: !input time_night
+        sequence:
+          - service: media_player.play_media
+            data:
+              media_content_id: !input brightness_day
+              media_content_type: brightness
+            target: !input target_device
+      - conditions:
+          - condition: time
+            after: !input time_night
+            before: !input time_day
+        sequence:
+          - service: media_player.play_media
+            data:
+              media_content_id: !input brightness_night
+              media_content_type: brightness
+            target: !input target_device
+
+mode: single
