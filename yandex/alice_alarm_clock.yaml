@@ -34,9 +34,9 @@ action:
       media_content_type: text
     target: !input target_device
   - service: media_player.play_media
-      data:
-        media_content_id: !input media_url
-        media_content_type: audio/mp3
-      target: !input target_device
+    data:
+      media_content_id: !input media_url
+      media_content_type: audio/mp3
+    target: !input target_device
 
 mode: single
