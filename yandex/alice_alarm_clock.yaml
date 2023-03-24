@@ -29,6 +29,11 @@ trigger:
 
 action:
   - service: media_player.play_media
+    data:
+      media_content_id: Доброе утро, уже {{ now().hour }} {{ now().minute }}
+      media_content_type: text
+    target: !input target_device
+  - service: media_player.play_media
       data:
         media_content_id: !input media_url
         media_content_type: audio/mp3
